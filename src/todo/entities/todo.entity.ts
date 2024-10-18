@@ -6,22 +6,13 @@ import { TimeStampEntity } from './TimeStamp.entity'; // Ajustez le chemin si n�
 
 @Entity('todos')
 export class TodoEntity extends TimeStampEntity {
-  @PrimaryGeneratedColumn() // ID auto-incrémenté
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
-  @IsNotEmpty({ message: ValidationMessages.REQUIRED })
-  @IsString()
-  @Length(3, 10, {
-    message: `${ValidationMessages.NAME_MIN_LENGTH} ${ValidationMessages.NAME_MAX_LENGTH}`,
-  })
-  @Column({ length: 10 })
-  name: string;
 
-  @IsNotEmpty({ message: ValidationMessages.REQUIRED })
-  @Length(10, undefined, {
-    message: ValidationMessages.DESCRIPTION_MIN_LENGTH,
-  })
-  @Column({ type: 'text' })
+  @Column()
+  name: string;
+  @Column()
   description: string;
 
   @IsEnum(StatusEnum)
