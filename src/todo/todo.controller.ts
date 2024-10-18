@@ -1,25 +1,39 @@
 // src/todo/todo.controller.ts
-import { Controller, Post, Body, ValidationPipe, UsePipes, Put, Param, Get, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  ValidationPipe,
+  UsePipes,
+  Put,
+  Param,
+  Get,
+  NotFoundException,
+  Patch,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { TodoService } from './todo.service';
-import { StatusEnum } from './status.enum';
-import { TodoEntity } from './todo.entity';
-import { UpdateTodoDto } from './update-todo.dto';
-@Controller('todos')
-@UsePipes(new ValidationPipe({ transform: true  ,  whitelist: true}))
-export class TodoController {
+import { StatusEnum } from './enum/status.enum';
+import { TodoEntity } from './entities/todo.entity';
+import { UpdateTodoDto } from './dto/update-todo.dto';
+import { CreateTodoDto } from './dto/create-todo.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('todos')
+@Controller('todos')
+@UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Post()
-  async createTodo(
-    @Body() todo: TodoEntity, // Accept the whole TodoEntity object
-  ): Promise<TodoEntity> {
-    return this.todoService.createTodo(todo);
+  async createTodo(@Body() createTodoDto: CreateTodoDto): Promise<TodoEntity> {
+    return this.todoService.createTodo(createTodoDto);
   }
-  @Put(':id')
+  @Patch(':id')
   async updateTodo(
     @Param('id') id: number,
-    @Body() updateTodoDto: UpdateTodoDto, // Utilisez le DTO de mise à jour
+    @Body() updateTodoDto: UpdateTodoDto,
   ): Promise<TodoEntity> {
     return this.todoService.update(id, updateTodoDto);
   }
@@ -36,6 +50,41 @@ export class TodoController {
     }
     return todo;
   }
+  @Delete(':id')
+  async deleteTodo(@Param('id') id: number): Promise<void> {
+    return this.todoService.softdeleteTodo(id);
+  }
 
-  // Other endpoints (e.g., get all todos, get a todo by id, etc.) can be added here
+  @Put('restore/:id')
+  async restoreTodo(@Param('id') id: number): Promise<void> {
+    return this.todoService.restoreTodo(id);
+  }
+  @Get('count/status')
+  async countTodosByStatus(): Promise<{
+    pending: number;
+    inProgress: number;
+    completed: number;
+  }> {
+    return this.todoService.countTodosByStatus();
+  }
+  @Get('search')
+  async getFilteredTodos(
+    @Query('searchTerm') searchTerm?: string,
+    @Query('status') status?: StatusEnum,
+  ): Promise<TodoEntity[]> {
+    return await this.todoService.getFilteredTodos(searchTerm, status);
+  }
+
+  @Get('all')
+  async getAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ): Promise<{
+    data: TodoEntity[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    return await this.todoService.getAll(page, limit);
+  }
 }

@@ -1,11 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { StatusEnum } from './status.enum';
+import { StatusEnum } from '../enum/status.enum';
 import { IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
-import { ValidationMessages } from './validation-messages';
-import { BaseEntity } from './BaseEntity'; // Ajustez le chemin si nécessaire
+import { ValidationMessages } from '../validation-messages';
+import { TimeStampEntity } from './TimeStamp.entity'; // Ajustez le chemin si nécessaire
 
 @Entity('todos')
-export class TodoEntity extends BaseEntity {
+export class TodoEntity extends TimeStampEntity {
   @PrimaryGeneratedColumn() // ID auto-incrémenté
   id: number;
 

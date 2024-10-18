@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TodoController } from './todo.controller';
 import { TodoService } from './todo.service';
-import { TodoEntity } from './todo.entity';
-import { StatusEnum } from './status.enum';
+import { TodoEntity } from './entities/todo.entity';
+import { StatusEnum } from './enum/status.enum';
 
 describe('TodoController', () => {
   let controller: TodoController;
