@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 import { ValidationMessages } from '../validation-messages';
 import { ApiProperty } from '@nestjs/swagger';
 import { StatusEnum } from '../enum/status.enum'; // Swagger décorateur
@@ -12,13 +12,18 @@ export class CreateTodoDto {
   })
   name: string;
 
-  @ApiProperty({ description: 'La description du todo', example: 'Compléter le projet' })
+  @ApiProperty({
+    description: 'La description du todo',
+    example: 'Compléter le projet',
+  })
   @IsNotEmpty({ message: ValidationMessages.REQUIRED })
   @Length(10, undefined, {
     message: ValidationMessages.DESCRIPTION_MIN_LENGTH,
   })
   description: string;
-@ApiProperty({ description: 'Lae status du todo', example: 'PENDING' })
+  @ApiProperty({ description: 'Lae status du todo', example: 'PENDING' })
   status: StatusEnum;
-
+  @IsEmpty()
+  @IsOptional()
+  userId: number;
 }

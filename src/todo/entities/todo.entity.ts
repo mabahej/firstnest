@@ -1,21 +1,23 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { StatusEnum } from '../enum/status.enum';
-import { IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
-import { ValidationMessages } from '../validation-messages';
-import { TimeStampEntity } from './TimeStamp.entity'; // Ajustez le chemin si nécessaire
+import { IsEnum } from 'class-validator';
+import { TimeStampEntity } from '../../Generics/TimeStamp.entity';
 
 @Entity('todos')
-export class TodoEntity extends TimeStampEntity {
-  @PrimaryGeneratedColumn('uuid')
+export class Todo extends TimeStampEntity {
+  @PrimaryGeneratedColumn()
   id: number;
 
-
-  @Column()
+  @Column('varchar', {})
   name: string;
-  @Column()
+
+  @Column('varchar', {})
   description: string;
 
   @IsEnum(StatusEnum)
   @Column({ type: 'enum', enum: StatusEnum })
   status: StatusEnum;
+
+  @Column()
+  userId: number;
 }
