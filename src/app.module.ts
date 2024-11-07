@@ -9,6 +9,8 @@ import * as dotenv from 'dotenv';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { CvModule } from './cv/cv.module';
+import { SkillModule } from './skill/skill.module';
 dotenv.config();
 @Module({
   imports: [
@@ -27,6 +29,8 @@ dotenv.config();
     TodoModule,
     UserModule,
     AuthModule,
+    CvModule,
+    SkillModule,
   ],
   providers: [AppService],
   controllers: [AppController],
